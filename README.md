@@ -50,14 +50,22 @@ INFO: method.timed{class=de.scrum_master.app.Application,exception=none,method=d
 Please specifically note those log lines (line breaks inserted for better readability):
 
 ```text
+Excluding io.micrometer:micrometer-core:jar:1.7.0 from the shaded jar.
+```
+
+Like I said, it is important to exclude the original Micrometer files, ensuring that the woven ones will not just be the first but ideally the
+only ones found on the classpath.
+
+```text
 Join point 'method-execution(void de.scrum_master.app.Application.doSomething())'
   in Type 'de.scrum_master.app.Application' (Application.java:23)
   advised by around advice from 'io.micrometer.core.aop.TimedAspect'
   (micrometer-core-1.7.0.jar!TimedAspect.class(from TimedAspect.java))
 ```
 
-The above is proof that the `@Timed` annotation actually causes Micrometer's `TimedAspect` to be woven into our application code. And here are
-the measurements created by the aspect for the sample application:
+The above is proof that the `@Timed` annotation actually causes Micrometer's `TimedAspect` to be woven into our application code.
+
+Finally, here are the measurements created by the aspect for the sample application:
 
 ```text
 method.timed
